@@ -1,0 +1,6 @@
+@ConsultTechApp.Api_HostAddress = http://localhost:5001
+
+GET {{ConsultTechApp.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
