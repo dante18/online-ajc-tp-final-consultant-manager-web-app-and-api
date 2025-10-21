@@ -1,0 +1,49 @@
+name: Pipeline PR
+
+on:
+  pull_request:
+    branches: [ "main", "develop" ]
+
+env:
+  DOTNET_VERSION: '9.0.x'
+  BUILD_CONFIGURATION: 'Release'
+
+jobs:
+  api:
+    name: Build API
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Restore dependencies
+        run: dotnet restore ConsultTechApp.Api/ConsultTechApp.Api.csproj && dotnet restore ConsultTechApp.Core/ConsultTechApp.Core.csproj
+
+      - name: Build project
+        run: dotnet build ConsultTechApp.Api/ConsultTechApp.Api.csproj --configuration ${{ env.BUILD_CONFIGURATION }} --no-restore
+        
+  web:
+    name: Build Web
+    runs-on: ubuntu-latest
+    needs: api
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Restore dependencies
+        run: dotnet restore ConsultTechApp.Web.Services/ConsultTechApp.Web.Services.csproj && dotnet restore ConsultTechApp.Web/ConsultTechApp.Web.csproj
+
+      - name: Build project
+        run: dotnet build ConsultTechApp.Web/ConsultTechApp.Web.csproj --configuration ${{ env.BUILD_CONFIGURATION }} --no-restore
