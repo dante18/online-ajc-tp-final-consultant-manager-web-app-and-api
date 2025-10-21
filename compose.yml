@@ -1,0 +1,15 @@
+name: "consultTechApp"
+
+services:
+  consult_tech_mailer:
+    container_name: consult_tech_container_mailer
+    image: axllent/mailpit
+    ports:
+      - "1025:1025"
+      - "8025:8025"
+    networks:
+      - consult_tech_app_network
+
+networks:
+  consult_tech_app_network:
+    driver: bridge
