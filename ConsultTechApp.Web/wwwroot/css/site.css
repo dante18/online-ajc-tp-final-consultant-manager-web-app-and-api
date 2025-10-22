@@ -1,4 +1,4 @@
-html {
+﻿html {
   font-size: 14px;
 }
 
@@ -28,4 +28,19 @@ body {
 
 .form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
   text-align: start;
+}
+
+/* Aligner l'icône et le texte horizontalement */
+.notyf .notyf__icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 10px; /* Espacement entre l'icône et le texte */
+}
+
+/* Aligner le texte verticalement */
+.notyf .notyf__message {
+    display: inline-block;
+    vertical-align: middle;
+    line-height: normal;
 }
