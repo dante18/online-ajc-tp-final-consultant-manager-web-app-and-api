@@ -21,5 +21,5 @@ public class Customer
 
     public string ContactEmail { get; set; } = null!;
 
-    public ICollection<Mission> Missions { get; set; } = new List<Mission>();
+    public List<Mission> Missions { get; set; } = new List<Mission>();
 }

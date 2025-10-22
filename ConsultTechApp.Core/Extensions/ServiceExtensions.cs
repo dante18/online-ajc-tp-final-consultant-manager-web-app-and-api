@@ -1,5 +1,7 @@
 ﻿using ConsultTechApp.Core.Abstractions.Services;
 using ConsultTechApp.Core.Services;
+using ConsultTechApp.Core.Abstractions.Repositories;
+using ConsultTechApp.Core.Repositories;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -13,6 +15,7 @@ public static class ServiceExtensions
         services.AddTransient<IEmailService, EmailService>();
 
         // Data services
+        services.AddTransient<ICustomerRepository, CustomerRepository>();
 
         return services;
     }
