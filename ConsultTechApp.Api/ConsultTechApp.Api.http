@@ -1,6 +1,64 @@
-@ConsultTechApp.Api_HostAddress = http://localhost:5001
+﻿@ConsultTechApp.Api_HostAddress = https://localhost:7001
+@CustomerIdNotFound = 00000000-0000-0000-0000-000000000000
+@CustomerId = 491fe86e-cae8-4dfd-8ec8-9d573932d55d
+@CustomerIdDelete = 529842c9-97b4-4799-9dff-12fa441dda04
 
-GET {{ConsultTechApp.Api_HostAddress}}/weatherforecast/
+### 🧾 customer list
+GET {{ConsultTechApp.Api_HostAddress}}/api/customers
 Accept: application/json
 
 ###
+
+### 🔍 Get customer by id
+GET {{ConsultTechApp.Api_HostAddress}}/api/customers/{{CustomerId}}
+Accept: application/json
+
+###
+
+### 🔍 Get customer by id with error 404 not found
+GET {{ConsultTechApp.Api_HostAddress}}/api/customers/{{CustomerIdNotFound}}
+Accept: application/json
+
+###
+
+### ➕ create new customer
+POST {{ConsultTechApp.Api_HostAddress}}/api/customers
+Content-Type: application/json
+Accept: application/json
+
+{
+  "companyName": "TechNova",
+  "industry": "Informatique",
+  "address": "10 Avenue du Web, Lyon",
+  "contactName": "Sophie Lambert",
+  "contactEmail": "sophie@technova.com"
+}
+
+###
+
+### ✏️ Update customer
+PUT {{ConsultTechApp.Api_HostAddress}}/api/customers/{{CustomerId}}
+Content-Type: application/json
+Accept: application/json
+
+{
+  "companyName": "TechNova SA",
+  "industry": "Technologie",
+  "address": "12 Rue du Code, Lyon",
+  "contactName": "Sophie Lambert",
+  "contactEmail": "sophie.lambert@technova.com"
+}
+
+###
+
+### ❌ Delete customer
+DELETE {{ConsultTechApp.Api_HostAddress}}/api/customers/{{CustomerIdDelete}}
+Accept: application/json
+
+### ❌ Delete customer with 400 error
+DELETE {{ConsultTechApp.Api_HostAddress}}/api/customers/{{CustomerId}}
+Accept: application/json
+
+### ❌ Delete customer with 404 error
+DELETE {{ConsultTechApp.Api_HostAddress}}/api/customers/{{CustomerIdNotFound}}
+Accept: application/json

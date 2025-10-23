@@ -15,10 +15,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Dtos\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\ConsultTechApp.Core\ConsultTechApp.Core.csproj" />
   </ItemGroup>
 
