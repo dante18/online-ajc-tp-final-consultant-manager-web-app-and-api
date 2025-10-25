@@ -1,0 +1,123 @@
+﻿@using ConsultTechApp.Web.ViewsModels.Missions
+@model MissionsDetailsViewModel
+
+@{
+    ViewData["Title"] = "Mission detail - " + @Model.Title;
+}
+
+<div class="row">
+    <div class="col-6 d-flex align-items-center justify-content-start mt-3">
+        <h1>@Model.Title</h1>
+    </div>
+    <div class="col-6 d-flex align-items-center justify-content-end">
+        <a asp-action="Index" class="btn btn-primary">Return to the mission list</a>
+        <a asp-action="Edit" asp-route-id="@(Model.Id) " class="btn btn-warning ms-2">Edit mission</a>
+    </div>
+</div>
+<div class="row">
+    <div class="col-12 mt-2">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title">Main informations</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="table-responsive">
+                            <table class="table table-bordered">
+                                <tbody>
+                                    <tr>
+                                        <td style="width: 30%">
+                                            Title
+                                        </td>
+                                        <td>@(Model.Title)</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="width: 30%">
+                                            Description
+                                        </td>
+                                        <td>@(Model.Description)</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="width: 30%">
+                                            StartDate
+                                        </td>
+                                        <td>@(Model.StartDate.ToString("yyyy-MM-dd") ?? "—")</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="width: 30%">
+                                            EndDate
+                                        </td>
+                                        <td>@(Model.EndDate?.ToString("yyyy-MM-dd") ?? "—")</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="width: 30%">
+                                            EstimatedBudget
+                                        </td>
+                                        <td>
+                                            @(Model.EstimatedBudget)
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="width: 30%">
+                                            Customer
+                                        </td>
+                                        <td>
+                                            @(Model.Customer.CompanyName)
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-12 mt-2">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title">Mission list</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-12">
+                        @if (Model.Consultants.Count() > 0)
+                        {
+                            <div class="table-responsive mt-3">
+                                <table class="table table-bordered table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center">FirstName</th>
+                                            <th class="text-center">LastName</th>
+                                            <th class="text-center">Email</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var consultant in Model.Consultants)
+                                        {
+                                            <tr>
+                                                <td class="text-center">@consultant.FirstName</td>
+                                                <td class="text-center">@consultant.LastName</td>
+                                                <td class="text-center">@consultant.Email</td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="d-flex align-items-center justify-content-center flex-column mt-5 mb-5 ml-auto mr-auto">
+                                <i class="bi bi-info-circle" style="font-size: 8rem"></i>
+                                <span class="font-weight-bold text-center ml-auto mr-auto" style="font-size: 1.5rem">No consultant assigned to this mission</span>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
