@@ -21,7 +21,11 @@ internal class CustomerRepository : ICustomerRepository
 
     public Customer GetCustomer(Guid id)
     {
-        return _context.Customers.Include(c => c.Missions).Where(c => c.Id == id).FirstOrDefault();
+        return _context.Customers
+            .Include(c => c.Missions)
+            .ThenInclude(c => c.Assignments)
+            .ThenInclude(a => a.Consultant)
+            .Where(c => c.Id == id).FirstOrDefault();
     }
 
     public void CreateCustomer(Customer customer)

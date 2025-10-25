@@ -1,4 +1,5 @@
-﻿using ConsultTechApp.Api.Dtos.Customer;
+﻿using ConsultTechApp.Api.Dtos.Consultant;
+using ConsultTechApp.Api.Dtos.Customer;
 using ConsultTechApp.Api.Dtos.Mission;
 using ConsultTechApp.Core.Abstractions.Repositories;
 using ConsultTechApp.Core.Entities;
@@ -83,7 +84,25 @@ public class CustomersController : ControllerBase
                     Description = m.Description,
                     StartDate = m.StartDate,
                     EndDate = m.EndDate,
-                    EstimatedBudget = m.EstimatedBudget
+                    EstimatedBudget = m.EstimatedBudget,
+                    Customer = new CustomerDto()
+                    {
+                        Address = m.Customer.Address,
+                        CompanyName = m.Customer.CompanyName,
+                        ContactEmail = m.Customer.ContactEmail,
+                        ContactName = m.Customer.ContactName,
+                        Id = m.Customer.Id,
+                        Industry = m.Customer.Industry
+                    },
+                    Consultants = m.Assignments.Select(a => new ConsultantDto()
+                    {
+                        Email = a.Consultant.Email,
+                        FirstName = a.Consultant.FirstName,
+                        HireDate = a.Consultant.HireDate,
+                        Id = a.Consultant.Id,
+                        IsActive = a.Consultant.IsActive,
+                        LastName = a.Consultant.LastName
+                    }).ToList()
                 }).ToList()
             };
 

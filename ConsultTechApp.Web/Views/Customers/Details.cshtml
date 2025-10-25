@@ -87,6 +87,7 @@
                                             <th class="text-center">StartDate</th>
                                             <th class="text-center">EndDate</th>
                                             <th class="text-center">EstimatedBudget</th>
+                                            <th class="text-center">Consultants</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -98,6 +99,7 @@
                                                 <td class="text-center">@(mission.StartDate.ToString("yyyy-MM-dd") ?? "—")</td>
                                                 <td class="text-center">@(mission.EndDate?.ToString("yyyy-MM-dd") ?? "—")</td>
                                                 <td class="text-center">@mission.EstimatedBudget</td>
+                                                <td class="text-center">@mission.Consultants</td>
                                             </tr>
                                         }
                                     </tbody>

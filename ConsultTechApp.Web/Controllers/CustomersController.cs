@@ -48,7 +48,23 @@ public class CustomersController : Controller
                 return this.NotFound();
             }
 
-            return this.View(new CustomersDetailsViewModel()
+            List<MissionsViewModel> missions = new List<MissionsViewModel>();
+            if (customer.Missions is not null)
+            {
+                missions = customer.Missions.Select(m => new MissionsViewModel()
+                {
+                    Description = m.Description,
+                    EndDate = m.EndDate,
+                    StartDate = m.StartDate,
+                    EstimatedBudget = m.EstimatedBudget,
+                    Title = m.Title,
+                    Id = m.Id,
+                    Customer = customer.CompanyName,
+                    Consultants = m.Consultants is null ? "Not assigned" : string.Join(" , ", m.Consultants.Select(c => c.FirstName + " " + c.LastName).ToList())
+                }).ToList();
+            }
+
+            CustomersDetailsViewModel model = new CustomersDetailsViewModel()
             {
                 Id = customer.Id,
                 CompanyName = customer.CompanyName,
@@ -56,16 +72,10 @@ public class CustomersController : Controller
                 Address = customer.Address,
                 ContactName = customer.ContactName,
                 ContactEmail = customer.ContactEmail,
-                Missions = customer.Missions.Select(m => new MissionsViewModel()
-                {
-                    Description = m.Description,
-                    EndDate = m.EndDate,
-                    StartDate = m.StartDate,
-                    EstimatedBudget = m.EstimatedBudget,
-                    Title = m.Title,
-                    Id = m.Id
-                }).ToList()
-            });
+                Missions = missions
+            };
+
+            return this.View(model);
         }
         catch (Exception e)
         {
