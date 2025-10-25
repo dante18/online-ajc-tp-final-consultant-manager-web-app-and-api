@@ -12,8 +12,10 @@ public static class ServiceExtensions
         var uriApi = config.GetValue<string>("ApiSettings:BaseUrl");
 
         _ = services.AddHttpClient("Customers", client => client.BaseAddress = new($"{uriApi}/api/customers/"));
+        _ = services.AddHttpClient("Missions", client => client.BaseAddress = new($"{uriApi}/api/missions/"));
 
         _ = services.AddScoped<IApiCustomersService, CustomersService>();
+        _ = services.AddScoped<IApiMissionsService, MissionsService>();
 
         return services;
     }
