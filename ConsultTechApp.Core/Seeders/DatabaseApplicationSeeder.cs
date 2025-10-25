@@ -148,21 +148,36 @@ public static class DatabaseApplicationSeeder
         string password)
     {
         var existingUser = await userManager.FindByEmailAsync(email);
-        if (existingUser != null) return;
+        if (existingUser != null)
+            return;
 
         var user = new User
         {
-            UserName = email.Split('@')[0],
+            UserName = email,
             Email = email,
             FirstName = firstName,
             LastName = lastName,
             EmailConfirmed = true
         };
 
+        var result = await userManager.CreateAsync(user, password);
+        if (!result.Succeeded)
+        {
+            var errors = string.Join(", ", result.Errors.Select(e => e.Description));
+            throw new InvalidOperationException($"Failed to create user {email}: {errors}");
+        }
+
+        // ✅ Recharger pour être sûr que l’utilisateur est bien suivi
         var createdUser = await userManager.FindByEmailAsync(email);
         if (createdUser == null)
             throw new InvalidOperationException($"User {email} not found after creation.");
 
-        await userManager.AddToRoleAsync(createdUser, role);
+        // ✅ Ajout du rôle via le même UserManager (même contexte EF)
+        var roleResult = await userManager.AddToRoleAsync(createdUser, role);
+        if (!roleResult.Succeeded)
+        {
+            var errors = string.Join(", ", roleResult.Errors.Select(e => e.Description));
+            throw new InvalidOperationException($"Failed to assign role {role} to user {email}: {errors}");
+        }
     }
 }

@@ -16,6 +16,7 @@ public static class ServiceExtensions
 
         // Data services
         services.AddTransient<ICustomerRepository, CustomerRepository>();
+        services.AddTransient<IMissionRepository, MissionRepository>();
 
         return services;
     }

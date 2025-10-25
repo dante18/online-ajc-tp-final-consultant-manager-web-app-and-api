@@ -1,0 +1,82 @@
+﻿@using ConsultTechApp.Web.ViewsModels.Missions
+@model MissionsDeleteViewModel
+
+@{
+    ViewData["Title"] = "Mission delete - " + @Model.Title;
+}
+
+<div class="row">
+    <div class="col-6 d-flex align-items-center justify-content-start mt-3">
+        <h1>Delete @Model.Title informations</h1>
+    </div>
+    <div class="col-6 d-flex align-items-center justify-content-end">
+        <a asp-action="Index" class="btn btn-primary">Cancel and return to the mission list</a>
+    </div>
+</div>
+<div class="row">
+    <div class="col-12 d-flex align-items-center justify-content-start">
+        <h3>Are you sure you want to delete this mission?</h3>
+    </div>
+</div>
+<div class="row">
+    <div class="col-12">
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <tbody>
+                <tr>
+                    <td style="width: 30%">
+                        Title
+                    </td>
+                    <td>@(Model.Title)</td>
+                </tr>
+                <tr>
+                    <td style="width: 30%">
+                        Description
+                    </td>
+                    <td>@(Model.Description)</td>
+                </tr>
+                <tr>
+                    <td style="width: 30%">
+                        StartDate
+                    </td>
+                    <td>@(Model.StartDate.ToString("yyyy-MM-dd") ?? "—")</td>
+                </tr>
+                <tr>
+                    <td style="width: 30%">
+                        EndDate
+                    </td>
+                    <td>@(Model.EndDate?.ToString("yyyy-MM-dd") ?? "—")</td>
+                </tr>
+                <tr>
+                    <td style="width: 30%">
+                        EstimatedBudget
+                    </td>
+                    <td>
+                        @(Model.EstimatedBudget)
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width: 30%">
+                        Customer
+                    </td>
+                    <td>
+                        @(Model.Customer)
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-12 d-flex align-items-center justify-content-start">
+        <div>
+            <form asp-action="DeleteConfirmed" method="post">
+                <input type="hidden" name="id" value="@Model.Id" />
+                <div class="form-group">
+                    <input type="submit" value="Delete" class="btn btn-danger" />
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

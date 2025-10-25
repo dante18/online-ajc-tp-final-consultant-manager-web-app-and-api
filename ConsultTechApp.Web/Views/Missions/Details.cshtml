@@ -1,17 +1,17 @@
-﻿@using ConsultTechApp.Web.ViewsModels.Customers
-@model CustomersDetailsViewModel
+﻿@using ConsultTechApp.Web.ViewsModels.Missions
+@model MissionsDetailsViewModel
 
 @{
-    ViewData["Title"] = "Customer detail - " + @Model.CompanyName;
+    ViewData["Title"] = "Mission detail - " + @Model.Title;
 }
 
 <div class="row">
     <div class="col-6 d-flex align-items-center justify-content-start mt-3">
-        <h1>@Model.CompanyName</h1>
+        <h1>@Model.Title</h1>
     </div>
     <div class="col-6 d-flex align-items-center justify-content-end">
-        <a asp-action="Index" class="btn btn-primary">Return to the customer list</a>
-        <a asp-action="Edit" asp-route-id="@(Model.Id) " class="btn btn-warning ms-2">Edit customer</a>
+        <a asp-action="Index" class="btn btn-primary">Return to the mission list</a>
+        <a asp-action="Edit" asp-route-id="@(Model.Id) " class="btn btn-warning ms-2">Edit mission</a>
     </div>
 </div>
 <div class="row">
@@ -28,34 +28,42 @@
                                 <tbody>
                                     <tr>
                                         <td style="width: 30%">
-                                            Customer Name
+                                            Title
                                         </td>
-                                        <td>@(Model.CompanyName)</td>
+                                        <td>@(Model.Title)</td>
                                     </tr>
                                     <tr>
                                         <td style="width: 30%">
-                                            Sector of activity
+                                            Description
                                         </td>
-                                        <td>@(Model.Industry)</td>
+                                        <td>@(Model.Description)</td>
                                     </tr>
                                     <tr>
                                         <td style="width: 30%">
-                                            Address
+                                            StartDate
                                         </td>
-                                        <td>@(Model.Address)</td>
+                                        <td>@(Model.StartDate.ToString("yyyy-MM-dd") ?? "—")</td>
                                     </tr>
                                     <tr>
                                         <td style="width: 30%">
-                                            Contact Name
+                                            EndDate
                                         </td>
-                                        <td>@(Model.ContactName)</td>
+                                        <td>@(Model.EndDate?.ToString("yyyy-MM-dd") ?? "—")</td>
                                     </tr>
                                     <tr>
                                         <td style="width: 30%">
-                                            Contact Email
+                                            EstimatedBudget
                                         </td>
                                         <td>
-                                            @(Model.ContactEmail)
+                                            @(Model.EstimatedBudget)
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="width: 30%">
+                                            Customer
+                                        </td>
+                                        <td>
+                                            @(Model.Customer.CompanyName)
                                         </td>
                                     </tr>
                                 </tbody>
@@ -76,30 +84,24 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-12">
-                        @if (Model.Missions.Count() > 0)
+                        @if (Model.Consultants.Count() > 0)
                         {
                             <div class="table-responsive mt-3">
                                 <table class="table table-bordered table-striped">
                                     <thead>
                                         <tr>
-                                            <th class="text-center">Title</th>
-                                            <th class="text-center">Description</th>
-                                            <th class="text-center">StartDate</th>
-                                            <th class="text-center">EndDate</th>
-                                            <th class="text-center">EstimatedBudget</th>
-                                            <th class="text-center">Consultants</th>
+                                            <th class="text-center">FirstName</th>
+                                            <th class="text-center">LastName</th>
+                                            <th class="text-center">Email</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach (var mission in Model.Missions)
+                                        @foreach (var consultant in Model.Consultants)
                                         {
                                             <tr>
-                                                <td class="text-center">@mission.Title</td>
-                                                <td class="text-center">@mission.Description</td>
-                                                <td class="text-center">@(mission.StartDate.ToString("yyyy-MM-dd") ?? "—")</td>
-                                                <td class="text-center">@(mission.EndDate?.ToString("yyyy-MM-dd") ?? "—")</td>
-                                                <td class="text-center">@mission.EstimatedBudget</td>
-                                                <td class="text-center">@mission.Consultants</td>
+                                                <td class="text-center">@consultant.FirstName</td>
+                                                <td class="text-center">@consultant.LastName</td>
+                                                <td class="text-center">@consultant.Email</td>
                                             </tr>
                                         }
                                     </tbody>
@@ -108,10 +110,9 @@
                         }
                         else
                         {
-                            <div
-                                class="d-flex align-items-center justify-content-center flex-column mt-5 mb-5 ml-auto mr-auto">
+                            <div class="d-flex align-items-center justify-content-center flex-column mt-5 mb-5 ml-auto mr-auto">
                                 <i class="bi bi-info-circle" style="font-size: 8rem"></i>
-                                <span class="font-weight-bold text-center ml-auto mr-auto" style="font-size: 1.5rem">No mission information for this client</span>
+                                <span class="font-weight-bold text-center ml-auto mr-auto" style="font-size: 1.5rem">No consultant assigned to this mission</span>
                             </div>
                         }
                     </div>

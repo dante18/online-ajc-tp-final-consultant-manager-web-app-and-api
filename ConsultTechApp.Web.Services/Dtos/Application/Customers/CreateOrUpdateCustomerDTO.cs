@@ -1,26 +1,24 @@
-﻿using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace ConsultTechApp.Web.Services.Dtos.Application.Customers;
 
 public class CreateOrUpdateCustomerDto
 {
-    public Guid? Id { get; set; }
 
-    [DisplayName("Customer Name")]
     [StringLength(200)]
+    [Required]
     public string CompanyName { get; set; }
 
-    [DisplayName("Sector of activity")]
+    [Required]
     public string Industry { get; set; }
 
-    [DisplayName("Address")]
+    [Required]
     public string Address { get; set; }
 
-    [DisplayName("Contact Name")]
+    [Required]
     public string ContactName { get; set; }
 
-    [DisplayName("Contact Email")]
+    [Required]
     [EmailAddress]
     public string ContactEmail { get; set; }
 
