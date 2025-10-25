@@ -1,24 +1,25 @@
-﻿using ConsultTechApp.Api.Dtos.Consultant;
-using ConsultTechApp.Api.Dtos.Customer;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace ConsultTechApp.Api.Dtos.Mission;
 
-public class MissionDto
+public class CreateOrUpdateMissionDto
 {
-    public Guid? Id { get; set; }
-
+    [Required]
+    [MaxLength(200)]
     public string Title { get; set; }
 
+    [Required]
     public string Description { get; set; }
 
+    [Required]
     public DateTime StartDate { get; set; }
 
+    [Required]
     public DateTime? EndDate { get; set; }
 
+    [Required]
     public decimal EstimatedBudget { get; set; }
 
-    public CustomerDto Customer { get; set; }
-
-    public List<ConsultantDto>? Consultants { get; set; }
-        = null;
+    [Required]
+    public Guid CustomerId { get; set; }
 }
