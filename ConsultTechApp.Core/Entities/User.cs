@@ -7,9 +7,6 @@ namespace ConsultTechApp.Core.Entities;
 [Table("AspNetUsers")]
 public class User : IdentityUser<Guid>
 {
-    [Key]
-    public Guid Id { get; set; } = Guid.NewGuid();
-
     [Required]
     [MaxLength(100)]
     public string FirstName { get; set; } = string.Empty;
@@ -22,4 +19,3 @@ public class User : IdentityUser<Guid>
 
     public bool IsActive { get; set; } = true;
 }
-
