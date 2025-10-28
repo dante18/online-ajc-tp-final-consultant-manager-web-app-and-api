@@ -32,9 +32,9 @@ public static class DatabaseApplicationSeeder
         }
 
         // ===== 2. Création des utilisateurs =====
-        await CreateUserAsync(userManager, "admin@consulttech.com", "Super", "Admin", "Administrator", "Admin@123#!");
-        await CreateUserAsync(userManager, "rh@consulttech.com", "Claire", "Dupont", "RH", "Rh@123#!");
-        await CreateUserAsync(userManager, "manager@consulttech.com", "Marc", "Leroux", "Manager", "Manager@123#!");
+        //await CreateUserAsync(userManager, "admin@consulttech.com", "Super", "Admin", "Administrator", "Admin@123#!");
+        //await CreateUserAsync(userManager, "rh@consulttech.com", "Claire", "Dupont", "RH", "Rh@123#!");
+        //await CreateUserAsync(userManager, "manager@consulttech.com", "Marc", "Leroux", "Manager", "Manager@123#!");
 
         // ===== 3. Vérifie si des données existent déjà =====
         if (context.Consultants.Any()) return;
