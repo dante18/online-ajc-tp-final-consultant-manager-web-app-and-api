@@ -3,6 +3,7 @@ using ConsultTechApp.Core.Context;
 using ConsultTechApp.Core.Entities;
 using ConsultTechApp.Core.Seeders;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,10 +29,15 @@ using var scope = app.Services.CreateScope();
 try
 {
     var context = scope.ServiceProvider.GetRequiredService<ApplicationStoreContext>();
-    await context.Database.EnsureCreatedAsync();
+    await context.Database.MigrateAsync();
 
     var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
     logger.LogInformation("Database initialized successfully.");
+
+    if (app.Environment.IsDevelopment())
+    {
+        await DatabaseApplicationSeeder.SeedDevDataAsync(scope.ServiceProvider);
+    }
 }
 catch (Exception ex)
 {
@@ -43,12 +49,6 @@ catch (Exception ex)
 // Configure the HTTP request pipeline
 if (app.Environment.IsDevelopment())
 {
-    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
-    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole<Guid>>>();
-
-    var contextApplication = scope.ServiceProvider.GetRequiredService<ApplicationStoreContext>();
-    await DatabaseApplicationSeeder.SeedDevDataAsync(contextApplication, userManager, roleManager);
-
     app.UseDeveloperExceptionPage();
     app.MapOpenApi();
     app.UseSwagger();
