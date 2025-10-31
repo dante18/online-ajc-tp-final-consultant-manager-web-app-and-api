@@ -2,6 +2,8 @@
 @CustomerIdNotFound = 00000000-0000-0000-0000-000000000000
 @CustomerId = 491fe86e-cae8-4dfd-8ec8-9d573932d55d
 @CustomerIdDelete = 529842c9-97b4-4799-9dff-12fa441dda04
+@SkillId = E7FB3C31-8C22-42C0-05FC-08DE16208B83
+@SkillIdDelete = 09C2B386-9251-49EA-0469-08DE17C0F317
 
 ### 🧾 customer list
 GET {{ConsultTechApp.Api_HostAddress}}/api/customers
@@ -61,4 +63,39 @@ Accept: application/json
 
 ### ❌ Delete customer with 404 error
 DELETE {{ConsultTechApp.Api_HostAddress}}/api/customers/{{CustomerIdNotFound}}
+Accept: application/json
+
+###
+
+### 🧾 skill list
+GET {{ConsultTechApp.Api_HostAddress}}/api/skills
+Accept: application/json
+
+### 🔍 Get skill by id
+
+GET {{ConsultTechApp.Api_HostAddress}}/api/skills/{{SkillId}}
+Accept: application/json
+
+### ➕ create new skill
+POST {{ConsultTechApp.Api_HostAddress}}/api/skills
+Content-Type: application/json
+Accept: application/json
+
+{
+  "Name": "HTML",
+  "CategoryId": "B4E526CD-8773-4EC1-A0EC-08DE16208B79"
+} 
+
+### ✏️ Update skill
+PUT {{ConsultTechApp.Api_HostAddress}}/api/skills/{{SkillId}}
+Content-Type: application/json
+Accept: application/json
+
+{
+  "Name": "C++",
+  "CategoryId": "B4E526CD-8773-4EC1-A0EC-08DE16208B79"
+}
+
+### ❌ Delete skill
+DELETE {{ConsultTechApp.Api_HostAddress}}/api/skills/{{SkillIdDelete}}
 Accept: application/json

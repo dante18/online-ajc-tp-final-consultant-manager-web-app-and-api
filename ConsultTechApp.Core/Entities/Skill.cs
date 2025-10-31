@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace ConsultTechApp.Core.Entities;
 
@@ -18,5 +19,6 @@ public class Skill
 
     public Category Category { get; set; } = null!;
 
+    [JsonIgnore]
     public ICollection<ConsultantSkill> ConsultantSkills { get; set; } = new List<ConsultantSkill>();
 }
