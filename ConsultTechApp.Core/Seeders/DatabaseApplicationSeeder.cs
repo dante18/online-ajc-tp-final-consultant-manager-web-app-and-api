@@ -2,29 +2,28 @@
 using ConsultTechApp.Core.Entities;
 using ConsultTechApp.Core.Enums;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace ConsultTechApp.Core.Seeders;
 
 public static class DatabaseApplicationSeeder
 {
-    public static async Task SeedDevDataAsync(
-        ApplicationStoreContext context,
-        UserManager<User> userManager,
-        RoleManager<IdentityRole<Guid>> roleManager)
+    public static async Task SeedDevDataAsync(IServiceProvider serviceProvider)
     {
-        await context.Database.MigrateAsync();
+        using var scope = serviceProvider.CreateScope();
 
-        // ===== 1. Création des rôles =====
+        var userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
+        var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole<Guid>>>();
+        var context = scope.ServiceProvider.GetRequiredService<ApplicationStoreContext>();
+
+        // 2️⃣ Rôles
         var roles = new[] { "Administrator", "Manager", "Consultant", "RH" };
-
         foreach (var role in roles)
         {
             if (!await roleManager.RoleExistsAsync(role))
             {
                 await roleManager.CreateAsync(new IdentityRole<Guid>
                 {
-                    Id = Guid.NewGuid(),
                     Name = role,
                     NormalizedName = role.ToUpper()
                 });
@@ -36,10 +35,64 @@ public static class DatabaseApplicationSeeder
         //await CreateUserAsync(userManager, "rh@consulttech.com", "Claire", "Dupont", "RH", "Rh@123#!");
         //await CreateUserAsync(userManager, "manager@consulttech.com", "Marc", "Leroux", "Manager", "Manager@123#!");
 
-        // ===== 3. Vérifie si des données existent déjà =====
-        if (context.Consultants.Any()) return;
+        // 4️⃣ Données métiers
+        if (context.Consultants.Any())
+            return;
 
-        // ===== 4. Catégories =====
+        await SeedBusinessDataAsync(context);
+    }
+
+    private static async Task CreateUserAsync(
+        UserManager<User> userManager,
+        RoleManager<IdentityRole<Guid>> roleManager,
+        string email,
+        string firstName,
+        string lastName,
+        string role,
+        string password)
+    {
+        var existing = await userManager.FindByEmailAsync(email);
+        if (existing != null)
+        {
+            if (!await userManager.IsInRoleAsync(existing, role))
+                await userManager.AddToRoleAsync(existing, role);
+            return;
+        }
+
+        var user = new User
+        {
+            UserName = email,
+            Email = email,
+            FirstName = firstName,
+            LastName = lastName,
+            EmailConfirmed = true
+        };
+
+        // ➤ Étape critique : création
+        var result = await userManager.CreateAsync(user, password);
+        if (!result.Succeeded)
+        {
+            var errors = string.Join(", ", result.Errors.Select(e => e.Description));
+            throw new InvalidOperationException($"❌ Failed to create {email}: {errors}");
+        }
+
+        // ➤ Forcer un rechargement depuis la base via UserManager
+        var createdUser = await userManager.FindByEmailAsync(email);
+        if (createdUser == null)
+            throw new InvalidOperationException($"User {email} not found after creation.");
+
+        // ➤ Ajout du rôle
+        var roleResult = await userManager.AddToRoleAsync(createdUser, role);
+        if (!roleResult.Succeeded)
+        {
+            var errors = string.Join(", ", roleResult.Errors.Select(e => e.Description));
+            throw new InvalidOperationException($"❌ Failed to assign role {role} to {email}: {errors}");
+        }
+    }
+
+    private static async Task SeedBusinessDataAsync(ApplicationStoreContext context)
+    {
+        // ===== Categories =====
         var catDev = new Category { Name = "Développement" };
         var catData = new Category { Name = "Data" };
         var catInfra = new Category { Name = "Infrastructure" };
@@ -48,7 +101,7 @@ public static class DatabaseApplicationSeeder
         await context.Categories.AddRangeAsync(catDev, catData, catInfra, catSoft);
         await context.SaveChangesAsync();
 
-        // ===== 5. Compétences =====
+        // ===== Competences =====
         var skills = new List<Skill>
             {
                 new Skill { Name = "C#", CategoryId = catDev.Id },
@@ -60,7 +113,7 @@ public static class DatabaseApplicationSeeder
         await context.Skills.AddRangeAsync(skills);
         await context.SaveChangesAsync();
 
-        // ===== 6. Consultants =====
+        // ===== Consultants =====
         var c1 = new Consultant { FirstName = "Alice", LastName = "Durand", Email = "alice@consulttech.com", HireDate = new DateTime(2021, 1, 10) };
         var c2 = new Consultant { FirstName = "Bob", LastName = "Martin", Email = "bob@consulttech.com", HireDate = new DateTime(2020, 6, 1) };
         var c3 = new Consultant { FirstName = "Julie", LastName = "Bernard", Email = "julie@consulttech.com", HireDate = new DateTime(2022, 3, 15) };
@@ -68,7 +121,7 @@ public static class DatabaseApplicationSeeder
         await context.Consultants.AddRangeAsync(c1, c2, c3);
         await context.SaveChangesAsync();
 
-        // ===== 7. Compétences des consultants =====
+        // ===== Competences des consultants =====
         var consultantSkills = new List<ConsultantSkill>
             {
                 new ConsultantSkill { ConsultantId = c1.Id, SkillId = skills[0].Id, Level = ExpertiseLevel.Expert },
@@ -80,7 +133,7 @@ public static class DatabaseApplicationSeeder
         await context.ConsultantSkills.AddRangeAsync(consultantSkills);
         await context.SaveChangesAsync();
 
-        // ===== 8. Clients =====
+        // ===== Customer =====
         var customers = new List<Customer>
             {
                 new Customer { CompanyName = "Acme Corp", Industry = "Finance", Address = "1 Rue de la Bourse, Paris", ContactName = "Jean Petit", ContactEmail = "jean@acme.com" },
@@ -89,7 +142,7 @@ public static class DatabaseApplicationSeeder
         await context.Customers.AddRangeAsync(customers);
         await context.SaveChangesAsync();
 
-        // ===== 9. Missions =====
+        // ===== Missions =====
         var mission1 = new Mission
         {
             Title = "Migration Base de Données",
@@ -113,7 +166,7 @@ public static class DatabaseApplicationSeeder
         await context.Missions.AddRangeAsync(mission1, mission2);
         await context.SaveChangesAsync();
 
-        // ===== 10. Affectations =====
+        // ===== Affectations =====
         var assignments = new List<MissionAssignment>
             {
                 new MissionAssignment
@@ -137,47 +190,5 @@ public static class DatabaseApplicationSeeder
             };
         await context.MissionAssignments.AddRangeAsync(assignments);
         await context.SaveChangesAsync();
-    }
-
-    private static async Task CreateUserAsync(
-        UserManager<User> userManager,
-        string email,
-        string firstName,
-        string lastName,
-        string role,
-        string password)
-    {
-        var existingUser = await userManager.FindByEmailAsync(email);
-        if (existingUser != null)
-            return;
-
-        var user = new User
-        {
-            UserName = email,
-            Email = email,
-            FirstName = firstName,
-            LastName = lastName,
-            EmailConfirmed = true
-        };
-
-        var result = await userManager.CreateAsync(user, password);
-        if (!result.Succeeded)
-        {
-            var errors = string.Join(", ", result.Errors.Select(e => e.Description));
-            throw new InvalidOperationException($"Failed to create user {email}: {errors}");
-        }
-
-        // ✅ Recharger pour être sûr que l’utilisateur est bien suivi
-        var createdUser = await userManager.FindByEmailAsync(email);
-        if (createdUser == null)
-            throw new InvalidOperationException($"User {email} not found after creation.");
-
-        // ✅ Ajout du rôle via le même UserManager (même contexte EF)
-        var roleResult = await userManager.AddToRoleAsync(createdUser, role);
-        if (!roleResult.Succeeded)
-        {
-            var errors = string.Join(", ", roleResult.Errors.Select(e => e.Description));
-            throw new InvalidOperationException($"Failed to assign role {role} to user {email}: {errors}");
-        }
     }
 }
