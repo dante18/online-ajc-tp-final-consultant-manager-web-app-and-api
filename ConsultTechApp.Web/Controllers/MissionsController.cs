@@ -94,12 +94,12 @@ public class MissionsController : Controller
     public async Task<IActionResult> Create()
     {
         var customers = await this.customersService.GetCustomersAsync();
-        var customersCreateViewModel = new MissionsCreateViewModel
+        var missionsCreateViewModel = new MissionsCreateViewModel
         {
             CustomerList = customers.Select(c => new SelectListItem(c.CompanyName, c.Id.ToString())).ToList()
         };
 
-        return this.View(customersCreateViewModel);
+        return this.View(missionsCreateViewModel);
     }
 
     [HttpPost]
@@ -107,7 +107,21 @@ public class MissionsController : Controller
     public async Task<ActionResult> Create([Bind("Title, Description, StartDate, EndDate, EstimatedBudget, CustomerId")] MissionsCreateViewModel missionCreateViewModel)
     {
         if (!this.ModelState.IsValid)
-            return this.View(missionCreateViewModel);
+        {
+            var customers = await this.customersService.GetCustomersAsync();
+            var viewModel = new MissionsCreateViewModel
+            {
+                Title = missionCreateViewModel.Title,
+                CustomerId = missionCreateViewModel.CustomerId,
+                Description = missionCreateViewModel.Description,
+                EndDate = missionCreateViewModel.EndDate,
+                EstimatedBudget = missionCreateViewModel.EstimatedBudget,
+                StartDate = missionCreateViewModel.StartDate,
+                CustomerList = customers.Select(c => new SelectListItem(c.CompanyName, c.Id.ToString())).ToList()
+            };
+
+            return this.View(viewModel);
+        }
 
         try
         {
@@ -177,7 +191,21 @@ public class MissionsController : Controller
     public async Task<ActionResult> Edit(Guid id, [Bind("Id, Title, Description, StartDate, EndDate, EstimatedBudget, CustomerId")] MissionsEditViewModel missionEditViewModel)
     {
         if (!this.ModelState.IsValid)
-            return this.View(missionEditViewModel);
+        {
+            var customers = await this.customersService.GetCustomersAsync();
+            var viewModel = new MissionsEditViewModel
+            {
+                Title = missionEditViewModel.Title,
+                CustomerId = missionEditViewModel.CustomerId,
+                Description = missionEditViewModel.Description,
+                EndDate = missionEditViewModel.EndDate,
+                EstimatedBudget = missionEditViewModel.EstimatedBudget,
+                StartDate = missionEditViewModel.StartDate,
+                CustomerList = customers.Select(c => new SelectListItem(c.CompanyName, c.Id.ToString())).ToList()
+            };
+
+            return this.View(viewModel);
+        }
 
         try
         {
