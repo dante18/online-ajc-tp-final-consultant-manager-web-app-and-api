@@ -13,9 +13,13 @@ public static class ServiceExtensions
 
         _ = services.AddHttpClient("Customers", client => client.BaseAddress = new($"{uriApi}/api/customers/"));
         _ = services.AddHttpClient("Missions", client => client.BaseAddress = new($"{uriApi}/api/missions/"));
+        _ = services.AddHttpClient("Skills", client => client.BaseAddress = new($"{uriApi}/api/skills/"));
+        _ = services.AddHttpClient("Categories", client => client.BaseAddress = new($"{uriApi}/api/categories/"));
 
         _ = services.AddScoped<IApiCustomersService, CustomersService>();
         _ = services.AddScoped<IApiMissionsService, MissionsService>();
+        _ = services.AddScoped<IApiSkillsService, SkillsService>();
+        _ = services.AddScoped<IApiCategoriesService, CategoriesService>();
 
         return services;
     }

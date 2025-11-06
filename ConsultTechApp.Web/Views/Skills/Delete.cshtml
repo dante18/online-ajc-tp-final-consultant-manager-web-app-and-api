@@ -1,0 +1,48 @@
+﻿@using ConsultTechApp.Web.ViewsModels.Skills
+@model SkillsViewModel
+
+@{
+    ViewData["Title"] = "Skill delete - " + @Model.Name;
+}
+
+<div class="row">
+    <div class="col-6 d-flex align-items-center justify-content-start mt-3">
+        <h1>Delete @Model.Name informations</h1>
+    </div>
+    <div class="col-6 d-flex align-items-center justify-content-end">
+        <a asp-action="Index" class="btn btn-primary">Cancel and return to the customer list</a>
+    </div>
+</div>
+<div class="row">
+    <div class="col-12 d-flex align-items-center justify-content-start">
+        <h3>Are you sure you want to delete this skill?</h3>
+    </div>
+</div>
+<div class="row">
+    <div class="col-12">
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <tbody>
+                <tr>
+                    <td style="width: 30%">
+                        Skill Name
+                    </td>
+                    <td>@(Model.Name)</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-12 d-flex align-items-center justify-content-start">
+        <div>
+            <form asp-action="DeleteConfirmed" method="post">
+                <input type="hidden" name="id" value="@Model.Id" />
+                <div class="form-group">
+                    <input type="submit" value="Delete" class="btn btn-danger" />
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

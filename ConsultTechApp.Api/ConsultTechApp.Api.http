@@ -4,6 +4,8 @@
 @CustomerIdDelete = 529842c9-97b4-4799-9dff-12fa441dda04
 @SkillId = E7FB3C31-8C22-42C0-05FC-08DE16208B83
 @SkillIdDelete = 09C2B386-9251-49EA-0469-08DE17C0F317
+@CategoryId = B4E526CD-8773-4EC1-A0EC-08DE16208B79
+@CategoryIdDelete = 3DEA6522-FBF3-44E9-440D-08DE1D3EBE2E
 
 ### 🧾 customer list
 GET {{ConsultTechApp.Api_HostAddress}}/api/customers
@@ -98,4 +100,37 @@ Accept: application/json
 
 ### ❌ Delete skill
 DELETE {{ConsultTechApp.Api_HostAddress}}/api/skills/{{SkillIdDelete}}
+Accept: application/json
+
+###
+
+### 🧾 category list
+GET {{ConsultTechApp.Api_HostAddress}}/api/categories
+Accept: application/json
+
+### 🔍 Get category by id
+
+GET {{ConsultTechApp.Api_HostAddress}}/api/categories/{{CategoryId}}
+Accept: application/json
+
+### ➕ create new category
+POST {{ConsultTechApp.Api_HostAddress}}/api/categories
+Content-Type: application/json
+Accept: application/json
+
+{
+  "Name": "test"
+} 
+
+### ✏️ Update category
+PUT {{ConsultTechApp.Api_HostAddress}}/api/categories/{{CategoryId}}
+Content-Type: application/json
+Accept: application/json
+
+{
+  "Name": "Développement"
+}
+
+### ❌ Delete category
+DELETE {{ConsultTechApp.Api_HostAddress}}/api/categories/{{CategoryIdDelete}}
 Accept: application/json

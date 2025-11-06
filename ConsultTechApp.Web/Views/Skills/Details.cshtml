@@ -1,0 +1,49 @@
+﻿@using ConsultTechApp.Web.ViewsModels.Skills
+@model SkillsViewModel
+
+@{
+    ViewData["Title"] = "Skill detail - " + @Model.Name;
+}
+
+<div class="row">
+    <div class="col-6 d-flex align-items-center justify-content-start mt-3">
+        <h1>@Model.Name</h1>
+    </div>
+    <div class="col-6 d-flex align-items-center justify-content-end">
+        <a asp-action="Index" class="btn btn-primary">Return to the skill list</a>
+        <a asp-action="Edit" asp-route-id="@(Model.Id) " class="btn btn-warning ms-2">Edit skill</a>
+    </div>
+</div>
+<div class="row">
+    <div class="col-12 mt-2">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title">Main informations</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="table-responsive">
+                            <table class="table table-bordered">
+                                <tbody>
+                                    <tr>
+                                        <td style="width: 30%">
+                                            Skill Name
+                                        </td>
+                                        <td>@(Model.Name)</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="width: 30%">
+                                            Category
+                                        </td>
+                                        <td>@(Model.CategoryName)</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
