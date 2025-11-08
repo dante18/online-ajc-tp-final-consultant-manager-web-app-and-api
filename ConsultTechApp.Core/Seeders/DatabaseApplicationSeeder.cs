@@ -16,7 +16,7 @@ public static class DatabaseApplicationSeeder
         var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole<Guid>>>();
         var context = scope.ServiceProvider.GetRequiredService<ApplicationStoreContext>();
 
-        // 2️⃣ Rôles
+        // 2️ Rôles
         var roles = new[] { "Administrator", "Manager", "Consultant", "RH" };
         foreach (var role in roles)
         {
@@ -30,12 +30,16 @@ public static class DatabaseApplicationSeeder
             }
         }
 
+        // 3️ Users
+        await CreateUserAsync(userManager,"admin@consulttech.com", "Super", "Admin", "Administrator", "Admin@123#!");
+        await CreateUserAsync(userManager, "rh@consulttech.com", "Claire", "Dupont", "RH", "Rh@123#!");
+        await CreateUserAsync(userManager, "manager@consulttech.com", "Marc", "Leroux", "Manager", "Manager@123#!");
         // ===== 2. Création des utilisateurs =====
         //await CreateUserAsync(userManager, "admin@consulttech.com", "Super", "Admin", "Administrator", "Admin@123#!");
         //await CreateUserAsync(userManager, "rh@consulttech.com", "Claire", "Dupont", "RH", "Rh@123#!");
         //await CreateUserAsync(userManager, "manager@consulttech.com", "Marc", "Leroux", "Manager", "Manager@123#!");
 
-        // 4️⃣ Données métiers
+        // 4️ Business data
         if (context.Consultants.Any())
             return;
 
@@ -44,7 +48,6 @@ public static class DatabaseApplicationSeeder
 
     private static async Task CreateUserAsync(
         UserManager<User> userManager,
-        RoleManager<IdentityRole<Guid>> roleManager,
         string email,
         string firstName,
         string lastName,
@@ -68,7 +71,7 @@ public static class DatabaseApplicationSeeder
             EmailConfirmed = true
         };
 
-        // ➤ Étape critique : création
+        // ➤ Critical step: creation
         var result = await userManager.CreateAsync(user, password);
         if (!result.Succeeded)
         {
@@ -76,12 +79,12 @@ public static class DatabaseApplicationSeeder
             throw new InvalidOperationException($"❌ Failed to create {email}: {errors}");
         }
 
-        // ➤ Forcer un rechargement depuis la base via UserManager
+        // ➤ Force a reload from the database via UserManager
         var createdUser = await userManager.FindByEmailAsync(email);
         if (createdUser == null)
             throw new InvalidOperationException($"User {email} not found after creation.");
 
-        // ➤ Ajout du rôle
+        // ➤ Adding the role
         var roleResult = await userManager.AddToRoleAsync(createdUser, role);
         if (!roleResult.Succeeded)
         {
@@ -101,7 +104,7 @@ public static class DatabaseApplicationSeeder
         await context.Categories.AddRangeAsync(catDev, catData, catInfra, catSoft);
         await context.SaveChangesAsync();
 
-        // ===== Competences =====
+        // ===== Skills =====
         var skills = new List<Skill>
             {
                 new Skill { Name = "C#", CategoryId = catDev.Id },
@@ -121,7 +124,7 @@ public static class DatabaseApplicationSeeder
         await context.Consultants.AddRangeAsync(c1, c2, c3);
         await context.SaveChangesAsync();
 
-        // ===== Competences des consultants =====
+        // ===== Consultant skills =====
         var consultantSkills = new List<ConsultantSkill>
             {
                 new ConsultantSkill { ConsultantId = c1.Id, SkillId = skills[0].Id, Level = ExpertiseLevel.Expert },
@@ -133,7 +136,7 @@ public static class DatabaseApplicationSeeder
         await context.ConsultantSkills.AddRangeAsync(consultantSkills);
         await context.SaveChangesAsync();
 
-        // ===== Customer =====
+        // ===== Customers =====
         var customers = new List<Customer>
             {
                 new Customer { CompanyName = "Acme Corp", Industry = "Finance", Address = "1 Rue de la Bourse, Paris", ContactName = "Jean Petit", ContactEmail = "jean@acme.com" },
@@ -166,7 +169,7 @@ public static class DatabaseApplicationSeeder
         await context.Missions.AddRangeAsync(mission1, mission2);
         await context.SaveChangesAsync();
 
-        // ===== Affectations =====
+        // ===== Assignments =====
         var assignments = new List<MissionAssignment>
             {
                 new MissionAssignment
