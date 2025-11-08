@@ -2,7 +2,7 @@
 
 namespace ConsultTechApp.Api.Dtos.Mission;
 
-public class CreateOrUpdateMissionDto
+public class CreateOrUpdateMissionDto : IValidatableObject
 {
     [Required]
     [MaxLength(200)]
@@ -18,8 +18,19 @@ public class CreateOrUpdateMissionDto
     public DateTime? EndDate { get; set; }
 
     [Required]
+    [Range(1, double.MaxValue)]
     public decimal EstimatedBudget { get; set; }
 
     [Required]
     public Guid CustomerId { get; set; }
+
+    public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+    {
+        if (EndDate.HasValue && EndDate <= StartDate)
+        {
+            yield return new ValidationResult(
+                "The end date must be later than the start date.",
+                new[] { nameof(EndDate) });
+        }
+    }
 }

@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ConsultTechApp.Web.ViewsModels.Missions;
 
-public class MissionsCreateViewModel
+public class MissionsCreateViewModel : IValidatableObject
 {
     [Required(ErrorMessage = "Title is required")]
     [StringLength(100, ErrorMessage = "Title cannot exceed 100 characters")]
@@ -36,4 +36,14 @@ public class MissionsCreateViewModel
 
     [DisplayName("Customer")]
     public Guid CustomerId { get; set; }
+
+    public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+    {
+        if (EndDate.HasValue && EndDate <= StartDate)
+        {
+            yield return new ValidationResult(
+                "The end date must be later than the start date.",
+                new[] { nameof(EndDate) });
+        }
+    }
 }
