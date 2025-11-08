@@ -140,7 +140,8 @@ public class MissionsController : ControllerBase
                 StartDate = dto.StartDate,
                 EndDate = dto.EndDate,
                 EstimatedBudget = dto.EstimatedBudget,
-                CustomerId = dto.CustomerId
+                CustomerId = dto.CustomerId,
+                Description = dto.Description
             };
 
             this.logger.LogDebug("Adding new mission to context: {MissionDetails}",
