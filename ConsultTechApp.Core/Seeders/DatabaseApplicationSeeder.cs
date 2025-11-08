@@ -29,7 +29,7 @@ public static class DatabaseApplicationSeeder
                 });
             }
         }
-
+      
         // 3️ Users
         await CreateUserAsync(userManager,"admin@consulttech.com", "Super", "Admin", "Administrator", "Admin@123#!");
         await CreateUserAsync(userManager, "rh@consulttech.com", "Claire", "Dupont", "RH", "Rh@123#!");
