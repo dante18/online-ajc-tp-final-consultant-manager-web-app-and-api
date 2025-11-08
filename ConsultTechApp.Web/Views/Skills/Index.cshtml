@@ -1,0 +1,42 @@
+﻿@using ConsultTechApp.Web.ViewsModels.Skills
+@model IEnumerable<SkillsViewModel>
+
+@{
+    ViewData["Title"] = "Skills";
+}
+
+<div class="row">
+    <div class="col-6 d-flex align-items-center justify-content-start">
+        <h1>Skills</h1>
+    </div>
+    <div class="col-6 d-flex align-items-center justify-content-end">
+        <a asp-action="Create" class="btn btn-primary">Add skill</a>
+    </div>
+</div>
+<div class="row">
+    <div class="col-12 table-responsive mt-3">
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th class="text-center">Skill Name</th>
+                    <th class="text-center">Category</th>
+                    <th class="text-center">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var skill in Model)
+                {
+                    <tr>
+                        <td class="text-center">@skill.Name</td>
+                        <td class="text-center">@skill.CategoryName</td>
+                        <td class="text-center">
+                            <a asp-action="Details" asp-route-id="@skill.Id" class="btn btn-info">Detail</a>
+                            <a asp-action="Edit" asp-route-id="@skill.Id" class="btn btn-warning">Edit</a>
+                            <a asp-action="Delete" asp-route-id="@skill.Id" class="btn btn-danger">Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

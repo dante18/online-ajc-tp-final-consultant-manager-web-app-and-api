@@ -30,10 +30,10 @@ public static class DatabaseApplicationSeeder
             }
         }
 
-        // 3️⃣ Utilisateurs
-        await CreateUserAsync(userManager, roleManager, "admin@consulttech.com", "Super", "Admin", "Administrator", "Admin@123#!");
-        await CreateUserAsync(userManager, roleManager, "rh@consulttech.com", "Claire", "Dupont", "RH", "Rh@123#!");
-        await CreateUserAsync(userManager, roleManager, "manager@consulttech.com", "Marc", "Leroux", "Manager", "Manager@123#!");
+        // ===== 2. Création des utilisateurs =====
+        //await CreateUserAsync(userManager, "admin@consulttech.com", "Super", "Admin", "Administrator", "Admin@123#!");
+        //await CreateUserAsync(userManager, "rh@consulttech.com", "Claire", "Dupont", "RH", "Rh@123#!");
+        //await CreateUserAsync(userManager, "manager@consulttech.com", "Marc", "Leroux", "Manager", "Manager@123#!");
 
         // 4️⃣ Données métiers
         if (context.Consultants.Any())
