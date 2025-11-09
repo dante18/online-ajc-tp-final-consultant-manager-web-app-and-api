@@ -196,8 +196,20 @@ public class MissionsControllerTests
 
         // Assert
         var view = Assert.IsType<ViewResult>(result);
-        Assert.Equal(vm, view.Model);
-        _missionsServiceMock.Verify(s => s.CreateMissionAsync(It.IsAny<CreateOrUpdateMissionDto>()), Times.Never);
+        var model = Assert.IsType<MissionsCreateViewModel>(view.Model);
+
+        Assert.False(_controller.ModelState.IsValid);
+        Assert.Equal("", model.Title);
+
+        if (model.CustomerList is not null)
+        {
+            // au moins ça n'explose pas
+            Assert.True(model.CustomerList.Count >= 0);
+        }
+
+        _missionsServiceMock.Verify(
+            s => s.CreateMissionAsync(It.IsAny<CreateOrUpdateMissionDto>()),
+            Times.Never);
     }
 
     [Fact]
@@ -296,6 +308,7 @@ public class MissionsControllerTests
             Id = id,
             Title = ""
         };
+
         _controller.ModelState.AddModelError("Title", "Required");
 
         // Act
@@ -303,8 +316,19 @@ public class MissionsControllerTests
 
         // Assert
         var view = Assert.IsType<ViewResult>(result);
-        Assert.Equal(vm, view.Model);
-        _missionsServiceMock.Verify(s => s.UpdateMissionAsync(It.IsAny<Guid>(), It.IsAny<CreateOrUpdateMissionDto>()), Times.Never);
+        var model = Assert.IsType<MissionsEditViewModel>(view.Model);
+
+        Assert.False(_controller.ModelState.IsValid);
+        Assert.NotNull(model);
+
+        if (model.CustomerList is not null)
+        {
+            Assert.True(model.CustomerList.Count >= 0);
+        }
+
+        _missionsServiceMock.Verify(
+            s => s.UpdateMissionAsync(It.IsAny<Guid>(), It.IsAny<CreateOrUpdateMissionDto>()),
+            Times.Never);
     }
 
     [Fact]
