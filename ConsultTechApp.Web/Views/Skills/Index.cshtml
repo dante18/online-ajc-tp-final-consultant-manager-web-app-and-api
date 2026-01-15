@@ -15,12 +15,12 @@
 </div>
 <div class="row">
     <div class="col-12 table-responsive mt-3">
-        <table class="table table-bordered table-striped">
+        <table class="table table-bordered table-striped" style="table-layout: auto;">
             <thead>
                 <tr>
                     <th class="text-center">Skill Name</th>
                     <th class="text-center">Category</th>
-                    <th class="text-center">Actions</th>
+                    <th class="text-center text-nowrap" style="width:1%">Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -29,10 +29,10 @@
                     <tr>
                         <td class="text-center">@skill.Name</td>
                         <td class="text-center">@skill.CategoryName</td>
-                        <td class="text-center">
-                            <a asp-action="Details" asp-route-id="@skill.Id" class="btn btn-info">Detail</a>
-                            <a asp-action="Edit" asp-route-id="@skill.Id" class="btn btn-warning">Edit</a>
-                            <a asp-action="Delete" asp-route-id="@skill.Id" class="btn btn-danger">Delete</a>
+                        <td class="text-center text-nowrap">
+                            <a asp-action="Details" asp-route-id="@skill.Id" class="btn btn-info btn-sm">Detail</a>
+                            <a asp-action="Edit" asp-route-id="@skill.Id" class="btn btn-warning btn-sm">Edit</a>
+                            <a asp-action="Delete" asp-route-id="@skill.Id" class="btn btn-danger btn-sm">Delete</a>
                         </td>
                     </tr>
                 }
